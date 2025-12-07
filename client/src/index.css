@@ -18,3 +18,7 @@
   display: none;
 }
 
+.reset-tw :not(pre, code) {
+  all: revert;
+  
+}

@@ -5,6 +5,7 @@ import ChatBox from './Components/ChatBox'
 import Credit from './Pages/Credit.jsx'
 import Community from './Pages/Community.jsx'
 import { assets } from './assets/assets.js'
+import './assets/prism.css'
 
 const App = () => {
 
