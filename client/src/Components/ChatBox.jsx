@@ -30,7 +30,8 @@ useEffect(() => {
           </div>
          )}
 
-         }
+         {messages.map((message, index) => )}
+
       </div>
 
       {/* prompt input area */}
