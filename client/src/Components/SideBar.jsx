@@ -1,16 +1,20 @@
 import React, {useState} from 'react'
 import { useAppContext } from '../Context/AppContext.jsx';
 import { assets } from '../assets/assets.js';
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
-const SideBar = () => {
+const SideBar = ({isMenuOpen, setIsMenuOpen}) => {
 
 const {chats, setSelectedChat, theme, setTheme, user} = useAppContext();
 const [search, setSearch] = useState('');
+const navigate = useNavigate();
 
   return (
 
-    <div className='flex flex-col h-screen min-w-72 p-5 dark:bg-gradient-to-b from-[#242124] to-[#000000]/30 
-    border-r border-[#80609F]/30 backdrop-blur-3xl transition-all duration-500 max-md:absolute left-0 z-1'>
+    <div className={`flex flex-col h-screen min-w-72 p-5 dark:bg-gradient-to-b from-[#242124] to-[#000000]/30 
+    border-r border-[#80609F]/30 backdrop-blur-3xl transition-all duration-500 max-md:absolute left-0 z-1
+     ${!isMenuOpen && 'max-md:-translate-x-full'}`}>
 
       {/* logo */}
       <img src={theme === 'dark' ? assets.logo_full : assets.logo_full_dark} alt="logo"
@@ -60,13 +64,70 @@ const [search, setSearch] = useState('');
                           {chat.messages?.length > 0 ? chat.messages[0].content.slice(0, 32) : chat.name}
                         </p>
                         <p className='text-xs text-gray-500 dark:text-[#B1A6C0]'>
-                            {chat.updatedAt}
+                            {moment(chat.updatedAt).fromNow()}
                         </p>
                     </div>
-                    <img src={assets.bin_icon} alt="bin" className='hidden group-hover:block w-4 cursor-pointer not dark:invert'/>
+                    
+                    <img src={assets.bin_icon} alt="bin" className='hidden group-hover:block w-4 cursor-pointer not-dark:invert'/>
+              
                  </div>))
                                 }
     </div>
+
+    {/* community images */}
+
+    <div onClick={() => {navigate('/community')}} className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
+     dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all'>
+        <img src={assets.gallery_icon} alt='' className='w-4.5 not-dark:invert'/>
+        <div className='flex flex-col text-sm'>
+            Community Images
+        </div>
+    </div>
+
+    
+    {/* credit purchases options */}
+    <div onClick={() => {navigate('/credits')}} className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
+     dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all'>
+        <img src={assets.diamond_icon} alt='' className='w-4.5 dark:invert'/>
+        <div className='flex flex-col text-sm'>
+           <p> Credit : {user?.credits}</p>
+           <p className='text-xs text-gray-400'>Purchase credits to use quickgpt</p>
+        </div>
+    </div>
+
+    {/* dark mode toggle */}
+    <div className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
+     dark:border-white/15 rounded-md'>
+        
+        <div className='flex items-center gap-2 text-sm'>
+            <img src={assets.theme_icon} alt='' className='w-4 not-dark:invert'/>
+            <p className='relative inline-flex cursor-pointer'>Dark Mode</p>
+        </div>
+        <label className='relative inline-flex cursor-pointer'>
+            <input type='checkbox' className='sr-only peer' checked={theme === 'dark'}
+             onChange={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />
+             <div className='w-9 h-5 bg-gray-400 rounded-full peer-checked:bg-purple-600 transition-all'>
+
+             </div>
+             <span className='absolute left-1 top-1 w-3 h-3 bg-white rounded-full 
+             transition-transform peer-checked:translate-x-4'>
+
+             </span>
+        </label>
+    </div>
+
+    {/* user Account */}
+
+    <div className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
+     dark:border-white/15 rounded-md cursor-pointer '>
+        <img src={assets.user_icon} alt='' className='w-4.5 rounded-full'/>
+        <p className='flex-1 text-sm dark:text-primary'>{user?.name ?? 'login your account'}</p>
+        {user && <img src={assets.logout_icon} alt='' 
+        className='hidden h-5 cursor-pointer not-dark:invert group-hover:block'/>}
+    </div>
+
+    <img onClick={()=> setIsMenuOpen(true)} src={assets.close_icon} alt='' className='absolute top-3 right-3 w-5 h-5 
+    cursor-pointer hidden not-dark:invert' /> 
 
     </div>
   )
