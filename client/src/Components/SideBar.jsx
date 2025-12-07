@@ -56,7 +56,7 @@ const navigate = useNavigate();
           })
           .map((chat) => (
                 <div key={chat._id}
-                    onClick={() => setSelectedChat(chat)}
+                    onClick={() => {navigate('/'); setSelectedChat(chat); setIsMenuOpen(false)}}
                     className='p-2 px-4 dark:bg-[#57317C]/10 border border-gray-300 dark:border-[#80609F]/15 rounded-md 
                     cursor-pointer flex justify-between group'>
                     <div>
@@ -76,7 +76,7 @@ const navigate = useNavigate();
 
     {/* community images */}
 
-    <div onClick={() => {navigate('/community')}} className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
+    <div onClick={() => {navigate('/community'); setIsMenuOpen(false)}} className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
      dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all'>
         <img src={assets.gallery_icon} alt='' className='w-4.5 not-dark:invert'/>
         <div className='flex flex-col text-sm'>
@@ -86,7 +86,7 @@ const navigate = useNavigate();
 
     
     {/* credit purchases options */}
-    <div onClick={() => {navigate('/credits')}} className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
+    <div onClick={() => {navigate('/credits'); setIsMenuOpen(false)}} className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
      dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all'>
         <img src={assets.diamond_icon} alt='' className='w-4.5 dark:invert'/>
         <div className='flex flex-col text-sm'>
@@ -96,7 +96,7 @@ const navigate = useNavigate();
     </div>
 
     {/* dark mode toggle */}
-    <div className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
+    <div className='flex items-center justify-between gap-2 p-3 mt-4 border border-gray-300 
      dark:border-white/15 rounded-md'>
         
         <div className='flex items-center gap-2 text-sm'>
@@ -119,15 +119,15 @@ const navigate = useNavigate();
     {/* user Account */}
 
     <div className='flex items-center gap-2 p-3 mt-4 border border-gray-300 
-     dark:border-white/15 rounded-md cursor-pointer '>
+     dark:border-white/15 rounded-md cursor-pointer group'>
         <img src={assets.user_icon} alt='' className='w-4.5 rounded-full'/>
-        <p className='flex-1 text-sm dark:text-primary'>{user?.name ?? 'login your account'}</p>
+        <p className='flex-1 text-sm dark:text-primary truncate'>{user? user.name : 'login your account'}</p>
         {user && <img src={assets.logout_icon} alt='' 
         className='hidden h-5 cursor-pointer not-dark:invert group-hover:block'/>}
     </div>
 
-    <img onClick={()=> setIsMenuOpen(true)} src={assets.close_icon} alt='' className='absolute top-3 right-3 w-5 h-5 
-    cursor-pointer hidden not-dark:invert' /> 
+    <img onClick={()=> setIsMenuOpen(false)} src={assets.close_icon} alt='' className='absolute top-3 right-3 w-5 h-5 
+    cursor-pointer md:hidden not-dark:invert' /> 
 
     </div>
   )
