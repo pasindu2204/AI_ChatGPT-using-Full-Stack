@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import React, {use, useEffect, useRef, useState} from 'react'
 import { useAppContext } from '../Context/AppContext.jsx';
 import { assets } from '../assets/assets.js';
 import Message from './Message.jsx';
 
 const ChatBox = () => {
+
+  const containerRef = useRef(null);
 
   const {selectedChat, theme} = useAppContext();
   const [messages, setMessages] = useState([]);
@@ -24,12 +26,20 @@ useEffect(() => {
   }
 } , [selectedChat]);
 
+useEffect(() => {
+  if (containerRef.current) {
+    containerRef.current.scrollTo({
+      top: containerRef.current.scrollHeight,
+      behavior: 'smooth',});
+    }
+}, [messages]);
+
   return (
     <div className='flex-1 flex flex-col justify-between m-5 md:m-10 
     xl:mx-30 max-md:mt-14 2xl:pr-40'>
 
       {/* chat messages area */}
-      <div className='flex-1 mb-5 overflow-y-scroll'>
+      <div ref={containerRef} className='flex-1 mb-5 overflow-y-scroll'>
          {messages.length === 0 && (
           <div className='h-full flex flex-col items-center justify-center gap-2 text-primary'>
             <img src={theme === 'dark' ? assets.logo_full : assets.logo_full_dark}
@@ -56,7 +66,7 @@ useEffect(() => {
 
       </div>
 
-      {mode !== 'image' && (
+      {mode === 'image' && (
   <div className='flex justify-center mb-3'>
     <label className='flex items-center gap-2 text-sm cursor-pointer'>
       <p className='text-xs'>Publish Generated Image to Community</p>
