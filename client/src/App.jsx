@@ -7,8 +7,12 @@ import Community from './Pages/Community.jsx'
 import { assets } from './assets/assets.js'
 import './assets/prism.css'
 import Loading from './Pages/Loading.jsx'
+import { useAppContext } from './Context/AppContext.jsx'
+import Login from './Pages/Login.jsx'
 
 const App = () => {
+
+  const { user } = useAppContext();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {pathname} = useLocation();
@@ -22,6 +26,8 @@ const App = () => {
     {!isMenuOpen && <img onClick={() => setIsMenuOpen(true)} src={assets.menu_icon} alt="" className='w-8 h-8 
     absolute top-5 left-5 cursor-pointer z-10 md:hidden not-dark:invert' />}
 
+   {user ? (
+
     <div className='dark:bg-gradient-to-b from-[#242124] to-[#000000] dark:text-white'>
 
     <div className='flex h-screen w-screen'>
@@ -33,6 +39,15 @@ const App = () => {
       </Routes>
     </div>
       </div>
+
+   ) : 
+   (
+    <div className='bg-gradient-to-b from-[#242124] to-[#000000] h-screen w-screen flex items-center'>
+      <Login />
+    </div>
+    )}
+
+    
     </>
   )
 }
