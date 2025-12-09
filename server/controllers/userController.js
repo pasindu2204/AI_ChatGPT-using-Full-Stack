@@ -32,7 +32,8 @@ export const registerUser = async (req, res) => {
 
 
     } catch (error) {
-        res.json({ success: false, message: 'Server Error' });
+        console.log('Registration error:', error);
+        res.json({ success: false, message: error.message });
     }
 }
 
@@ -56,7 +57,8 @@ try {
         }
     }
 } catch (error) {
-    return res.json({ success: false, message: 'Server Error' });
+    console.log('Login error:', error);
+    return res.json({ success: false, message: error.message });
 }}
 
 
@@ -67,6 +69,7 @@ export const getUser = async (req, res) => {
         const user = req.user;
         return res.json({ success: true, user });
     } catch (error) {
-        return res.json({ success: false, message: 'Server Error' });
+        console.log('Get user error:', error);
+        return res.json({ success: false, message: error.message });
     }
 }
