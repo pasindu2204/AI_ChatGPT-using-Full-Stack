@@ -1,15 +1,20 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import connectDB from './configs/db.js';
 import userRouter from './routes/userRoutes.js';
 import chatRouter from './routes/chatRoutes.js';
+import messageRouter from './routes/messageRoutes.js';
 
-dotenv.config();
+
+
+
 
 const app = express();
 
 
+// load environment variables early
+// dotenv.config();
 
 await connectDB();
 
@@ -21,6 +26,10 @@ app.use(express.json());
 app.get('/', (req, res) => res.send('server is running'));
 app.use('/api/user', userRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/message', messageRouter);
+
+
+
 
 const PORT = process.env.PORT || 3000;
 
