@@ -1,4 +1,5 @@
-import Transaction from "../models/Transaction"
+import Transaction from "../models/Transaction.js"
+import Stripe from "stripe";
 
 
 
@@ -6,7 +7,7 @@ const plans = [
     {
         _id: "basic",
         name: "Basic",
-        price: 10,
+        price: 1,
         credits: 100,
         features: ['100 text generations', '50 image generations', 'Standard support', 'Access to basic models']
     },
@@ -28,13 +29,15 @@ const plans = [
 
 
 // api controller to get all plans
-export const getPlansController = async (req, res) => {
+export const getPlans = async (req, res) => {
     try {
         res.json({ success: true, plans });
     } catch (error) {
         res.json({ success: false, message: error.message });
     }
 }
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // api controller for purchasing plan 
 export const purchasePlan = async (req, res) => {
@@ -53,11 +56,34 @@ export const purchasePlan = async (req, res) => {
             planId: planId,
             amount: plan.price,
             credits: plan.credits,
-            isPaid: false,
+            isPaid: true,
         });
-        await transaction.save();
 
-        res.json({ success: true, message: "Plan purchased successfully", transaction });
+        // SAVE transaction to database
+        await transaction.save();
+        
+        const {origin} = req.headers;
+        const session = await stripe.checkout.sessions.create({
+                line_items: [
+                    {
+                    price_data: {
+                        currency: 'usd',
+                        unit_amount: plan.price * 100,
+                        product_data: {
+                            name: `${plan.name} Plan`,
+                            },
+                      },
+                    quantity: 1,
+                    },
+                ],
+                mode: 'payment',
+                success_url: `${origin}/loading`,
+                cancel_url: `${origin}`,
+                metadata: { transactionId: transaction._id.toString(), appId: 'quickgpt' },
+                expires_at: Math.floor(Date.now() / 1000) + 30 * 60, // expire in 30min
+                });
+
+                res.json({ success: true, url: session.url });
     } catch (error) {
         res.json({ success: false, message: error.message });
     }

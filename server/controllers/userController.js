@@ -27,8 +27,7 @@ export const registerUser = async (req, res) => {
 
         res.json({
             success: true,
-            user,
-            token,
+            token
         });
 
 
@@ -50,15 +49,13 @@ try {
             const token = generateToken(user._id);
             return res.json({
                 success: true,
-                user,
-                token,
+                token
             });
         } else {
             return res.json({ success: false, message: 'Invalid email or password' });
         }
     }
 } catch (error) {
-    console.log('Login error:', error);
     return res.json({ success: false, message: error.message });
 }}
 
@@ -70,12 +67,11 @@ export const getUser = async (req, res) => {
         const user = req.user;
         return res.json({ success: true, user });
     } catch (error) {
-        console.log('Get user error:', error);
         return res.json({ success: false, message: error.message });
     }
 }
 
-// api to get published images
+// api to get all published images
 export const getPublishedImages = async (req, res) => {
     try {
         const getPublishedImages = await Chat.aggregate([
